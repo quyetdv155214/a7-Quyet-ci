@@ -9,15 +9,18 @@ import java.io.IOException;
 
 /**
  * Created by q on 30/11/2016.
- *
+ * <p>
  * them ti thoi
  */
 public class GameWindow extends Frame {
     Image background;
-    Image plane3;
+    Image plane1;
     Image enemy_plane;
-    private int planeX = 250;
+    Image plane2;
+    private int planeX = 300;
     private int planeY = 300;
+    private int planeX2 = 400;
+    private int planeY2 = 300;
     private int enemy_planeX = 300;
     private int enemy_planeY = 100;
 
@@ -69,8 +72,9 @@ public class GameWindow extends Frame {
         });
         try {
             background = ImageIO.read(new File("resources/background.png"));
-            plane3 = ImageIO.read(new File("resources/plane3.png"));
+            plane1 = ImageIO.read(new File("resources/plane2.png"));
             enemy_plane = ImageIO.read(new File("resources/enemy_plane_white_1.png"));
+            plane2 = ImageIO.read(new File("resources/plane3.png"));
         } catch (IOException e) {
             System.out.println("Load Image Fail");
             e.printStackTrace();
@@ -86,7 +90,7 @@ public class GameWindow extends Frame {
             public void keyPressed(KeyEvent e) {
                 switch (e.getKeyCode()) {
                     case KeyEvent.VK_UP:
-                        if ( planeY < 20) {
+                        if (planeY < 20) {
                             break;
                         }
                         planeY -= 5;
@@ -100,15 +104,41 @@ public class GameWindow extends Frame {
                         repaint();
                         break;
                     case KeyEvent.VK_LEFT:
-                        if(planeX == 0){
+                        if (planeX == 0) {
                             break;
                         }
                         planeX -= 5;
                         repaint();
                         break;
                     case KeyEvent.VK_RIGHT:
-                        if(planeX == 800-100)break;
+                        if (planeX == 800 - 100) break;
                         planeX += 5;
+                        repaint();
+                        break;
+                    case KeyEvent.VK_W:
+                        if (planeY2 < 20) {
+                            break;
+                        }
+                        planeY2 -= 5;
+                        repaint();
+                        break;
+                    case KeyEvent.VK_S:
+                        if (planeY2 > 600 - 100) {
+                            break;
+                        }
+                        planeY2 += 5;
+                        repaint();
+                        break;
+                    case KeyEvent.VK_A:
+                        if (planeX2 == 0) {
+                            break;
+                        }
+                        planeX2 -= 5;
+                        repaint();
+                        break;
+                    case KeyEvent.VK_D:
+                        if (planeX2 == 800 - 100) break;
+                        planeX2 += 5;
                         repaint();
                         break;
                 }
@@ -126,7 +156,10 @@ public class GameWindow extends Frame {
     @Override
     public void paint(Graphics g) {
         g.drawImage(background, 0, 0, 800, 600, null);
-        g.drawImage(plane3, planeX, planeY, 100, 100, null);
-        g.drawImage(enemy_plane,enemy_planeX,enemy_planeY, null);
+        g.drawImage(plane1, planeX, planeY, 100, 100, null);
+        g.drawImage(plane2, planeX2, planeY2, 100, 100, null);
+
+        g.drawImage(enemy_plane, enemy_planeX, enemy_planeY, null);
+
     }
 }
