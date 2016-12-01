@@ -15,9 +15,11 @@ import java.io.IOException;
 public class GameWindow extends Frame {
     Image background;
     Image plane3;
-//    Image
-    private int planeX = 300;
+    Image enemy_plane;
+    private int planeX = 250;
     private int planeY = 300;
+    private int enemy_planeX = 300;
+    private int enemy_planeY = 100;
 
     public GameWindow() {
         setVisible(true);
@@ -68,6 +70,7 @@ public class GameWindow extends Frame {
         try {
             background = ImageIO.read(new File("resources/background.png"));
             plane3 = ImageIO.read(new File("resources/plane3.png"));
+            enemy_plane = ImageIO.read(new File("resources/enemy_plane_white_1.png"));
         } catch (IOException e) {
             System.out.println("Load Image Fail");
             e.printStackTrace();
@@ -124,5 +127,6 @@ public class GameWindow extends Frame {
     public void paint(Graphics g) {
         g.drawImage(background, 0, 0, 800, 600, null);
         g.drawImage(plane3, planeX, planeY, 100, 100, null);
+        g.drawImage(enemy_plane,enemy_planeX,enemy_planeY, null);
     }
 }
