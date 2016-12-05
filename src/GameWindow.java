@@ -1,67 +1,79 @@
+import controllers.BulletController;
+import controllers.KeySetting;
+import controllers.PlaneController;
+import model.BulletModel;
+import model.PlaneModel;
+import views.BulletView;
+import views.PlaneView;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
- * Created by q on 30/11/2016.
- * <p>
- * them ti thoi
+ * Created by q on 12/5/2016.
  */
-public class GameWindow extends Frame {
+public class GameWindow extends Frame implements Runnable {
     Image background;
-    Image plane1;
-    Image enemy_plane;
-    Image plane2;
-    private int planeX = 300;
-    private int planeY = 300;
-    private int planeX2 = 400;
-    private int planeY2 = 300;
-    private int enemy_planeX = 300;
-    private int enemy_planeY = 100;
+    PlaneController planeController;
+    KeySetting keySetting;
+    PlaneModel planeModel;
+    PlaneView planeView;
+    BufferedImage backBuffer;
+    BulletController bulletController;
+    ArrayList<BulletController> bulletControllers;
+    String pathPlaneImage = "resources/plane2.png";
+    String pathBulletImage ="resources/bullet.png";
+    String pathBackGround = "resources/background.png";
 
     public GameWindow() {
+        keySetting = new KeySetting(KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT);
+        planeModel = new PlaneModel(300, 300);
+        planeView = new PlaneView(loadImage(pathPlaneImage));
+        planeController = new PlaneController(planeModel, planeView);
+        planeController.setKeySetting(keySetting);
+        bulletControllers =new ArrayList<>();
+
+        background = loadImage(pathBackGround);
+
         setVisible(true);
         setSize(800, 600);
-        setResizable(false);
-        this.addWindowListener(new WindowListener() {
+        backBuffer = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        addWindowListener(new WindowListener() {
             @Override
             public void windowOpened(WindowEvent e) {
-                System.out.println("WindowOpened");
+                System.out.println("window Opened!");
             }
 
             @Override
             public void windowClosing(WindowEvent e) {
-                System.out.println("windowClosing");
-                System.exit(0);
 
+                System.exit(0);
             }
 
             @Override
             public void windowClosed(WindowEvent e) {
                 System.out.println("windowClosed");
-
             }
 
             @Override
             public void windowIconified(WindowEvent e) {
-                System.out.println("windowIconified");
 
             }
 
             @Override
             public void windowDeiconified(WindowEvent e) {
-                System.out.println("windowDeiconified");
 
             }
 
             @Override
             public void windowActivated(WindowEvent e) {
-                System.out.println("windowActivated");
 
             }
 
@@ -70,77 +82,24 @@ public class GameWindow extends Frame {
 
             }
         });
-        try {
-            background = ImageIO.read(new File("resources/background.png"));
-            plane1 = ImageIO.read(new File("resources/plane2.png"));
-            enemy_plane = ImageIO.read(new File("resources/enemy_plane_white_1.png"));
-            plane2 = ImageIO.read(new File("resources/plane3.png"));
-        } catch (IOException e) {
-            System.out.println("Load Image Fail");
-            e.printStackTrace();
-        }
 
         addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
-                System.out.println("keyTyped");
+
             }
 
             @Override
             public void keyPressed(KeyEvent e) {
-                switch (e.getKeyCode()) {
-                    case KeyEvent.VK_UP:
-                        if (planeY < 20) {
-                            break;
-                        }
-                        planeY -= 5;
-                        repaint();
-                        break;
-                    case KeyEvent.VK_DOWN:
-                        if (planeY > 600 - 100) {
-                            break;
-                        }
-                        planeY += 5;
-                        repaint();
-                        break;
-                    case KeyEvent.VK_LEFT:
-                        if (planeX == 0) {
-                            break;
-                        }
-                        planeX -= 5;
-                        repaint();
-                        break;
-                    case KeyEvent.VK_RIGHT:
-                        if (planeX == 800 - 100) break;
-                        planeX += 5;
-                        repaint();
-                        break;
-                    case KeyEvent.VK_W:
-                        if (planeY2 < 20) {
-                            break;
-                        }
-                        planeY2 -= 5;
-                        repaint();
-                        break;
-                    case KeyEvent.VK_S:
-                        if (planeY2 > 600 - 100) {
-                            break;
-                        }
-                        planeY2 += 5;
-                        repaint();
-                        break;
-                    case KeyEvent.VK_A:
-                        if (planeX2 == 0) {
-                            break;
-                        }
-                        planeX2 -= 5;
-                        repaint();
-                        break;
-                    case KeyEvent.VK_D:
-                        if (planeX2 == 800 - 100) break;
-                        planeX2 += 5;
-                        repaint();
-                        break;
+                System.out.println("keyPressed");
+
+                planeController.keyPress(e);
+                if ((e.getKeyCode() == KeyEvent.VK_SPACE)) {
+                    int bulletX = planeController.getPlaneModel().getX() + 30;
+                    int bulletY = planeController.getPlaneModel().getY() - 15;
+                    BulletView bulletView = new BulletView(loadImage(pathBulletImage));
+                    BulletModel bulletModel=new BulletModel(bulletX,bulletY);
+                    bulletControllers.add(new BulletController(bulletModel,bulletView));
                 }
 
             }
@@ -150,16 +109,46 @@ public class GameWindow extends Frame {
 
             }
         });
-        repaint();
+        this.repaint();
     }
 
     @Override
-    public void paint(Graphics g) {
-        g.drawImage(background, 0, 0, 800, 600, null);
-        g.drawImage(plane1, planeX, planeY, 100, 100, null);
-        g.drawImage(plane2, planeX2, planeY2, 100, 100, null);
+    public void update(Graphics g) {
+        Graphics backBufferGraphic = backBuffer.getGraphics();
+        backBufferGraphic.drawImage(background, 0, 0, this.getWidth(), this.getHeight(), null);
+        planeController.draw(backBufferGraphic);
+        for (BulletController bulletController: bulletControllers) {
+            bulletController.draw(backBufferGraphic);
+        }
+        g.drawImage(backBuffer, 0, 0, this.getWidth(), this.getHeight(), null);
+    }
 
-        g.drawImage(enemy_plane, enemy_planeX, enemy_planeY, null);
+    @Override
+    public void run() {
+        while (true) {
+            try {
 
+this.repaint();
+                Thread.sleep(10);
+                for (int i = 0; i < bulletControllers.size(); i++) {
+                    bulletControllers.get(i).getBulletModel().move(0,-5);
+                    if (bulletControllers.get(i).getBulletModel().getY() < 0) {
+                        bulletControllers.remove(i);
+                    }
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public Image loadImage(String path) {
+        try {
+            Image image = ImageIO.read(new File(path));
+            return image;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
