@@ -14,6 +14,7 @@ import java.util.Random;
 public class EnemyControler extends Controler {
 //    private EnemyBulletControler enemyBulletControler;
 
+
     private ArrayList<EnemyBulletControler> enemyBulletControlers = new ArrayList<>();
 
     public void addBullet() {
