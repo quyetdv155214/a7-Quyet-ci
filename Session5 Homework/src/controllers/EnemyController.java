@@ -7,6 +7,7 @@ import utils.Utils;
 import views.View;
 
 import java.awt.*;
+import java.util.Iterator;
 import java.util.Vector;
 
 /**
@@ -37,7 +38,7 @@ public class EnemyController extends Controller implements Body {
 
         this.model.move(SPEED_X, SPEED_Y);
         timeCounter++;
-        if (timeCounter > 30) {
+        if (timeCounter > 60) {
             shoot();
             timeCounter = 0;
         }
@@ -45,8 +46,10 @@ public class EnemyController extends Controller implements Body {
         for (EnemyBulletController enemyBulletController : this.enemyBulletControllers) {
             enemyBulletController.run();
         }
-        this.enemyBulletControllers.removeAll(
-                EnemyBulletController.getBulletOutOfMap(enemyBulletControllers));
+        removeBullet();
+        if(!this.getModel().isAlive()){
+            BodyManager.instance.remove(this);
+        }
     }
 //
 
@@ -60,6 +63,15 @@ public class EnemyController extends Controller implements Body {
     }
     public void setMoveSin(){
 
+    }
+    public void removeBullet(){
+        Iterator<EnemyBulletController> iterator =enemyBulletControllers.iterator();
+        while(iterator.hasNext()){
+            EnemyBulletController enemyBulletController = iterator.next();
+            if(!enemyBulletController.getModel().isAlive() || enemyBulletController.getModel().getY() > 800){
+                iterator.remove();
+            }
+        }
     }
 
 
@@ -86,6 +98,8 @@ public class EnemyController extends Controller implements Body {
                 this.model.getMidX() - EnemyBulletController.WIDTH / 2, //getMidX
                 this.model.getBottom()
         );
+        enemyBulletController.getModel().setHp(1);
+
 
         // Add bullet to vector
         this.enemyBulletControllers.add(enemyBulletController);
@@ -101,7 +115,7 @@ public class EnemyController extends Controller implements Body {
     @Override
     public void onContact(Body orther) {
         if (orther instanceof BulletController){
-            System.out.println("huhu");
+
             this.getModel().decHp(1);
 
 

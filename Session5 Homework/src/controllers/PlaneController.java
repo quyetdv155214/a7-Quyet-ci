@@ -24,7 +24,7 @@ public class PlaneController extends Controller implements Body {
     }
 
     public void keyPressed(KeyEvent e) {
-        if(keySetting != null) {
+        if(keySetting != null && this.getModel().isAlive()) {
             int keyCode = e.getKeyCode();
             if(keyCode == keySetting.keyUp) {
                 model.move(0, -SPEED);
@@ -45,7 +45,7 @@ public class PlaneController extends Controller implements Body {
                 new Model(x, y, 70, 50),
                 new View(Utils.loadImage("resources/plane3.png"))
         );
-        planeController.getModel().setHp(50);
+        planeController.getModel().setHp(10);
         return planeController;
     }
 
@@ -54,7 +54,7 @@ public class PlaneController extends Controller implements Body {
         if (orther instanceof EnemyBulletController)
         {
             this.getModel().decHp(1);
-            System.out.println("a huhu");
+
         }
     }
 }

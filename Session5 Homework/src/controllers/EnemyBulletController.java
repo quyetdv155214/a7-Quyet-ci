@@ -26,6 +26,10 @@ public class EnemyBulletController extends Controller implements Body {
     @Override
     public void run() {
         model.move(SPEED_X, SPEED_Y);
+        if(!this.getModel().isAlive()){
+            BodyManager.instance.remove(this);
+        }
+
     }
 
     public static EnemyBulletController create(int x, int y) {
@@ -34,21 +38,7 @@ public class EnemyBulletController extends Controller implements Body {
                 new View(Utils.loadImage("resources/bullet-round.png"))
         );
     }
-    public static Vector<EnemyBulletController> getBulletOutOfMap(Vector<EnemyBulletController> enemyBulletControllers){
-        Vector<EnemyBulletController> templist = new Vector<>();
 
-        for (EnemyBulletController ebc : enemyBulletControllers
-             ) {
-            if(ebc.getModel().getY() > 600)
-            {
-                templist.add(ebc);
-            }
-
-        }
-        return templist;
-
-
-    }
 
     @Override
     public void onContact(Body orther) {

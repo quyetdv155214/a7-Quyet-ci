@@ -36,7 +36,7 @@ public class EnemyControllerManager extends ControllerManager {
         int x = ran.nextInt(500) + 100;
 
         EnemyController enemyController = EnemyController.create(x, 0);
-        enemyController.getModel().setHp(30);
+        enemyController.getModel().setHp(3);
         switch (type){
             case 0 : enemyController.setMoveStraight();
             break;

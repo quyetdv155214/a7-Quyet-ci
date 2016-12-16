@@ -18,6 +18,9 @@ public class BodyManager {
     public  void register(Body body){
         this.bodies.add(body);
     }
+    public void remove(Body body){
+        this.bodies.remove(body);
+    }
 
     public void checkContact(){
         for (int i = 0; i < bodies.size()-1; i++) {

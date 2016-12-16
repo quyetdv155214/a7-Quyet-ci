@@ -1,5 +1,6 @@
 package controllers.manangers;
 
+import controllers.Body;
 import controllers.Controller;
 
 import java.awt.*;
@@ -10,7 +11,7 @@ import java.util.Vector;
 /**
  * Created by apple on 12/10/16.
  */
-public class ControllerManager {
+public class ControllerManager{
     protected Vector<Controller> controllers;
 
     public ControllerManager() {
@@ -40,7 +41,6 @@ public class ControllerManager {
             if(!controller.getModel().isAlive() || controller.getModel().getX() <=0 || controller.getModel().getY() > 600){
                 iterator.remove();
             }
-
         }
     }
 

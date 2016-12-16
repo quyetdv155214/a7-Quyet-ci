@@ -2,18 +2,16 @@ import controllers.BulletController;
 
 import controllers.KeySetting;
 import controllers.PlaneController;
-import controllers.manangers.BodyManager;
-import controllers.manangers.EnemyControllerManager;
+import controllers.manangers.*;
 
 import java.awt.*;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.Vector;
 
 import static utils.Utils.loadImage;
@@ -27,7 +25,9 @@ public class GameWindow extends Frame implements Runnable {
     Image background;
 
     PlaneController planeController;
+
     EnemyControllerManager enemyControllerManager;
+    BulletControlerManager bulletControlerManager;
 
     Vector<BulletController> bulletVector;
     BufferedImage backBuffer;
@@ -36,7 +36,9 @@ public class GameWindow extends Frame implements Runnable {
 
         enemyControllerManager = new EnemyControllerManager();
 
-        bulletVector = new Vector<>();
+//        bulletVector = new Vector<>();
+        bulletControlerManager = new BulletControlerManager();
+//         planeControlerManager = new PlaneControlerManager();
 
         planeController = PlaneController.createPlane(300, 300);
 
@@ -45,6 +47,7 @@ public class GameWindow extends Frame implements Runnable {
                 KeyEvent.VK_DOWN,
                 KeyEvent.VK_LEFT,
                 KeyEvent.VK_RIGHT);
+//        planeControlerManager.add(planeController);
 
         setVisible(true);
         setSize(600, 400);
@@ -102,10 +105,10 @@ public class GameWindow extends Frame implements Runnable {
 //
                 planeController.keyPressed(e);
 
-                if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-                    BulletController bulletController = BulletController.createBullet(
-                            planeController.getModel().getMidX(), planeController.getModel().getY());
-                    bulletVector.add(bulletController);
+                if (e.getKeyCode() == KeyEvent.VK_SPACE && planeController.getModel().isAlive()) {
+//
+                    bulletControlerManager.createBullet(planeController.getModel().getMidX(), planeController.getModel().getY());
+
                 }
             }
 
@@ -114,6 +117,36 @@ public class GameWindow extends Frame implements Runnable {
 
             }
         });
+
+//        addMouseListener(new MouseListener() {
+//            @Override
+//            public void mouseClicked(MouseEvent e) {
+//
+//            }
+//            boolean press;
+//            @Override
+//            public void mousePressed(MouseEvent e) {
+//                timer.scheduleAtFixedRate(task, 0, 1000); // Time is in milliseconds
+//
+//            }
+//
+//            @Override
+//            public void mouseReleased(MouseEvent e) {
+//                task.cancel();
+//
+//            }
+//
+//            @Override
+//            public void mouseEntered(MouseEvent e) {
+//
+//            }
+//
+//            @Override
+//            public void mouseExited(MouseEvent e) {
+//
+//
+//            }
+//        });
     }
 
 
@@ -127,16 +160,18 @@ public class GameWindow extends Frame implements Runnable {
         backBufferGraphics.drawImage(background, 0, 0, 600, 400, null);
         planeController.draw(backBufferGraphics);
 
-        for (BulletController bullet : bulletVector)
-            bullet.draw(backBufferGraphics);
+//        for (BulletController bullet : bulletVector)
+//            bullet.draw(backBufferGraphics);
 
 
         enemyControllerManager.draw(backBufferGraphics);
+        bulletControlerManager.draw(backBufferGraphics);
 
         // Update window
         g.drawImage(backBuffer, 0, 0, 600, 400, null);
     }
 
+    boolean die = true;
 
     @Override
     public void run() {
@@ -145,12 +180,22 @@ public class GameWindow extends Frame implements Runnable {
                 this.repaint();
                 Thread.sleep(17);
 
-                for (BulletController bullet : bulletVector)
-                    bullet.run();
+//                for (BulletController bullet : bulletVector)
+//                    bullet.run();
 
+
+//                enemyControllerManager.run();
+//                bulletControlerManager.run();
 
                 BodyManager.instance.checkContact();
-                enemyControllerManager.run();
+                if (planeController.getModel().isAlive()) {
+                    enemyControllerManager.run();
+                    bulletControlerManager.run();
+                } else if (die) {
+                    System.out.println("you die");
+                    die = false;
+                }
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
