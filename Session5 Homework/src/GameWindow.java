@@ -1,13 +1,10 @@
 import controllers.BulletController;
-import controllers.EnemyController;
+
 import controllers.KeySetting;
 import controllers.PlaneController;
+import controllers.manangers.BodyManager;
 import controllers.manangers.EnemyControllerManager;
-import models.Model;
-import utils.Utils;
-import views.View;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -16,8 +13,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+
 import java.util.Vector;
 
 import static utils.Utils.loadImage;
@@ -98,15 +94,15 @@ public class GameWindow extends Frame implements Runnable {
         addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
-                System.out.println( "keyTyped");
+
             }
 
             @Override
             public void keyPressed(KeyEvent e) {
-//                System.out.println("keyPressed");
+//
                 planeController.keyPressed(e);
 
-                if(e.getKeyCode() == KeyEvent.VK_SPACE) {
+                if (e.getKeyCode() == KeyEvent.VK_SPACE) {
                     BulletController bulletController = BulletController.createBullet(
                             planeController.getModel().getMidX(), planeController.getModel().getY());
                     bulletVector.add(bulletController);
@@ -115,7 +111,7 @@ public class GameWindow extends Frame implements Runnable {
 
             @Override
             public void keyReleased(KeyEvent e) {
-                System.out.println("keyReleased");
+
             }
         });
     }
@@ -131,7 +127,7 @@ public class GameWindow extends Frame implements Runnable {
         backBufferGraphics.drawImage(background, 0, 0, 600, 400, null);
         planeController.draw(backBufferGraphics);
 
-        for(BulletController bullet : bulletVector)
+        for (BulletController bullet : bulletVector)
             bullet.draw(backBufferGraphics);
 
 
@@ -142,7 +138,6 @@ public class GameWindow extends Frame implements Runnable {
     }
 
 
-
     @Override
     public void run() {
         while (true) {
@@ -150,13 +145,12 @@ public class GameWindow extends Frame implements Runnable {
                 this.repaint();
                 Thread.sleep(17);
 
-                for(BulletController bullet : bulletVector)
+                for (BulletController bullet : bulletVector)
                     bullet.run();
-                // remove bullet
-                bulletVector.remove(BulletController.getBulletOutOfMap(bulletVector));
 
+
+                BodyManager.instance.checkContact();
                 enemyControllerManager.run();
-//                enemyController.run();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
