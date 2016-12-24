@@ -19,30 +19,27 @@ public class EnemyBulletController extends Controller implements Body {
     public static final int HEIGHT = 8;
     ShootBehavior shootBehavior;
     EnemyController enemyController ;
-    int x ;
-    int y;
 
     public EnemyBulletController(Model model, View view, ShootBehavior shootBehavior , EnemyController enemyController) {
 
         super(model, view);
         this.shootBehavior = shootBehavior;
         this.enemyController = enemyController;
-         x = enemyController.getModel().getX();
-        y =  enemyController.getModel().getY();
+
         BodyManager.instance.register(this);
 
     }
 
+
     @Override
     public void run() {
+
 //        model.move(SPEED_X, SPEED_Y);
         if (shootBehavior  != null)
         {
-            shootBehavior.doShoot(this, 0,0);
+            shootBehavior.doShoot(this, 100,150);
         }
-        if(!this.getModel().isAlive()){
-            BodyManager.instance.remove(this);
-        }
+
 
     }
 
@@ -59,7 +56,7 @@ public class EnemyBulletController extends Controller implements Body {
                 return new EnemyBulletController(
                         new Model(x, y, WIDTH, HEIGHT),
                         new View(Utils.loadImage("resources/bullet-round.png")),
-                        new ShootFollowBehavior(),
+                        new ShootSnipBehavior(),
                         enemyController
 
                 );
@@ -74,6 +71,9 @@ public class EnemyBulletController extends Controller implements Body {
         if(orther instanceof PlaneController)
         {
             this.getModel().decHp(1);
+        }
+        if(!this.getModel().isAlive()){
+            BodyManager.instance.remove(this);
         }
     }
 }

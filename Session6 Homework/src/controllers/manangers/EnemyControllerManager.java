@@ -9,7 +9,7 @@ import java.util.Random;
  * Created by apple on 12/10/16.
  */
 public class EnemyControllerManager extends ControllerManager {
-    int time_spawn = 100;
+    int time_spawn = 200;
     int temp = 0;
 
     @Override
@@ -28,10 +28,8 @@ public class EnemyControllerManager extends ControllerManager {
         //1: Create
         Random ran = new Random();
         // random x;
-//        int type = ran.nextInt(2);
 
-
-        int x = ran.nextInt(500) + 100;
+        int x = ran.nextInt(400) + 100;
         EnemyController enemyController = null;
 
 
@@ -41,7 +39,7 @@ public class EnemyControllerManager extends ControllerManager {
         else
             enemyController = EnemyController.create(x, 0, EnemyType.GREEN);
         i++;
-// set hp
+        // set hp
         enemyController.getModel().setHp(3);
 
         //2: Add new enemy to vector

@@ -8,6 +8,7 @@ public class ShootStraightBehavior implements ShootBehavior {
     @Override
     public void doShoot(EnemyBulletController enemyBulletController, int x , int y) {
         enemyBulletController.getModel().move(0, 3);
+//        System.out.println("shoot straight");
 
     }
 

@@ -45,7 +45,7 @@ public class PlaneController extends Controller implements Body {
                 new Model(x, y, 70, 50),
                 new View(Utils.loadImage("resources/plane3.png"))
         );
-        planeController.getModel().setHp(10);
+        planeController.getModel().setHp(100);
         return planeController;
     }
 

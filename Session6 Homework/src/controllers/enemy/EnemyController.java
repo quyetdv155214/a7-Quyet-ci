@@ -40,7 +40,8 @@ public class EnemyController extends Controller implements Body {
 
     @Override
     public void run() {
-
+        this.getModel().checkDead();
+        BodyManager.instance.remove();
 //        this.model.move(SPEED_X, SPEED_Y);
         if (moveBehavior != null) {
             moveBehavior.doMove(this);
@@ -56,9 +57,7 @@ public class EnemyController extends Controller implements Body {
 //            System.out.println("run");
         }
         removeBullet();
-        if (!this.getModel().isAlive()) {
-            BodyManager.instance.remove(this);
-        }
+
     }
 //
 
@@ -70,7 +69,7 @@ public class EnemyController extends Controller implements Body {
         Iterator<EnemyBulletController> iterator = enemyBulletControllers.iterator();
         while (iterator.hasNext()) {
             EnemyBulletController enemyBulletController = iterator.next();
-            if (!enemyBulletController.getModel().isAlive() || enemyBulletController.getModel().getY() > 800) {
+            if (!enemyBulletController.getModel().isAlive() || enemyBulletController.getModel().getY() > 400) {
                 iterator.remove();
             }
         }
@@ -147,5 +146,6 @@ public class EnemyController extends Controller implements Body {
 
 
         }
+
     }
 }

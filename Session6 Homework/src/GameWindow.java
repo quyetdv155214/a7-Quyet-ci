@@ -10,8 +10,6 @@ import java.awt.Image;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.Vector;
 
 import static utils.Utils.loadImage;
@@ -163,7 +161,7 @@ public class GameWindow extends Frame implements Runnable {
 //        for (BulletController bullet : bulletVector)
 //            bullet.draw(backBufferGraphics);
         backBufferGraphics.drawString(planeController.getModel().getHp()+"",100,100 );
-
+        backBufferGraphics.drawString("num of enemy : " + BodyManager.instance.getNumEnemy(),100,120);
 
         enemyControllerManager.draw(backBufferGraphics);
         bulletControlerManager.draw(backBufferGraphics);

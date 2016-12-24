@@ -1,8 +1,10 @@
 package controllers.manangers;
 
 import controllers.Body;
+import controllers.enemy.EnemyController;
 import models.Model;
 
+import java.util.Iterator;
 import java.util.Vector;
 
 /**
@@ -18,8 +20,29 @@ public class BodyManager {
     public  void register(Body body){
         this.bodies.add(body);
     }
-    public void remove(Body body){
-        this.bodies.remove(body);
+    public void remove(){
+        Iterator<Body> iterator = bodies.iterator();
+        while(iterator.hasNext()){
+            Model model = iterator.next().getModel();
+            if(model.isAlive()==false){
+                iterator.remove();
+            }
+        }
+    }
+    public void remove(Body body)
+    {
+        bodies.remove(body);
+    }
+    public int getNumEnemy(){
+        int count = 0 ;
+        for (Body b: bodies
+             ) {
+            if (b instanceof EnemyController){
+                count ++;
+            }
+
+        }
+        return  count;
     }
 
     public void checkContact(){
