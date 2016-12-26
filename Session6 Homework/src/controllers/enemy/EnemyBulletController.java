@@ -37,7 +37,7 @@ public class EnemyBulletController extends Controller implements Body {
 //        model.move(SPEED_X, SPEED_Y);
         if (shootBehavior  != null)
         {
-            shootBehavior.doShoot(this, 100,150);
+            shootBehavior.doShoot(this, this.getModel().getX(),this.getModel().getY());
         }
 
 

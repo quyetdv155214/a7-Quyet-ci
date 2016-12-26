@@ -90,7 +90,7 @@ public class Model {
     public void checkDead(){
         if (hp <= 0){
             setAlive(false);
-        }else if(x > 600 || x < 0 || y > 400 || y < 0 ){
+        }else if(x > 600 || x < 0 || y > 400 ){
             setAlive(false);
         }
     }

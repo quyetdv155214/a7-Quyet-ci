@@ -1,6 +1,7 @@
 package controllers;
 
 import controllers.enemy.EnemyBulletController;
+import controllers.enemy.EnemyController;
 import controllers.manangers.BodyManager;
 import models.Model;
 import utils.Utils;
@@ -17,23 +18,28 @@ public class PlaneController extends Controller implements Body {
 
     public KeySetting keySetting;
     public static final PlaneController instance = createPlane(300, 300);
-     private PlaneController(Model model, View view) {
+
+    private PlaneController(Model model, View view) {
         super(model, view);
         BodyManager.instance.register(this);
 
     }
 
     public void keyPressed(KeyEvent e) {
-        if(keySetting != null && this.getModel().isAlive()) {
+        if (keySetting != null && this.getModel().isAlive()) {
             int keyCode = e.getKeyCode();
-            if(keyCode == keySetting.keyUp) {
-                model.move(0, -SPEED);
+            if (keyCode == keySetting.keyUp) {
+                if (this.getModel().getY() > 30)
+                    model.move(0, -SPEED);
             } else if (keyCode == keySetting.keyDown) {
-                model.move(0, SPEED);
+                if (this.getModel().getY() < 400 - this.getModel().getHeight())
+                    model.move(0, SPEED);
             } else if (keyCode == keySetting.keyLeft) {
-                model.move(-SPEED, 0);
+                if (this.getModel().getX() < 600 - this.getModel().getWidth())
+                    model.move(-SPEED, 0);
             } else if (keyCode == keySetting.keyRight) {
-                model.move(SPEED, 0);
+                if (this.getModel().getX() > 0)
+                    model.move(SPEED, 0);
             }
         }
     }
@@ -51,10 +57,12 @@ public class PlaneController extends Controller implements Body {
 
     @Override
     public void onContact(Body orther) {
-        if (orther instanceof EnemyBulletController)
-        {
+        if (orther instanceof EnemyBulletController) {
             this.getModel().decHp(1);
 
+        }
+        if (orther instanceof EnemyController) {
+            this.getModel().decHp(2);
         }
     }
 }

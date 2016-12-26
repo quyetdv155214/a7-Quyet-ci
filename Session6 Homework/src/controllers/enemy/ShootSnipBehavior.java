@@ -10,7 +10,8 @@ import java.util.DoubleSummaryStatistics;
 public class ShootSnipBehavior implements ShootBehavior {
     boolean check = true;
     double deg;
-
+    int w =0 ;
+    int h= 0;
     private static final int px = PlaneController.instance.getModel().getMidX();
     private static final int py = PlaneController.instance.getModel().getMidY();
 
@@ -18,15 +19,21 @@ public class ShootSnipBehavior implements ShootBehavior {
     @Override
     public void doShoot(EnemyBulletController enemyBulletController, int x, int y) {
 
-        int h = Math.abs(py - y);
-        int w = Math.abs(x - px);
+        if (check) {
+            h = Math.abs(py - y);
+//            if (x > px)
+            w =(px -x);
 
+
+            check = false;
+        }
 //        if (ex < 500 && ex > 0 && ey < 700) {
-        deg = Math.atan(w / h);
-        check = false;
+//        deg = Math.atan(w / h);
+//        check = false;
 
-        double xSpeed = 2 * Math.sin(deg);
-        double ySpeed = 2 * Math.cos(deg);
+        double xSpeed = w / 50;
+        double ySpeed = h / 50;
+
         enemyBulletController.getModel().move((int) xSpeed, (int) ySpeed);
 
 

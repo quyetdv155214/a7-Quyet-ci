@@ -4,6 +4,7 @@ package controllers.enemy;
 import controllers.Body;
 import controllers.BulletController;
 import controllers.Controller;
+import controllers.PlaneController;
 import controllers.manangers.BodyManager;
 import models.Model;
 import utils.Utils;
@@ -144,7 +145,10 @@ public class EnemyController extends Controller implements Body {
 
             this.getModel().decHp(1);
 
-
+        }
+        if (orther instanceof PlaneController)
+        {
+            this.getModel().decHp(10);
         }
 
     }

@@ -2,6 +2,7 @@ import controllers.BulletController;
 
 import controllers.KeySetting;
 import controllers.PlaneController;
+import controllers.gif.BombManger;
 import controllers.manangers.*;
 
 import java.awt.*;
@@ -26,11 +27,13 @@ public class GameWindow extends Frame implements Runnable {
 
     EnemyControllerManager enemyControllerManager;
     BulletControlerManager bulletControlerManager;
+    BombManger bombManger;
 
     Vector<BulletController> bulletVector;
     BufferedImage backBuffer;
 
     public GameWindow() {
+        bombManger = new BombManger();
 
         enemyControllerManager = new EnemyControllerManager();
 
@@ -164,6 +167,8 @@ public class GameWindow extends Frame implements Runnable {
         backBufferGraphics.drawString("num of enemy : " + BodyManager.instance.getNumEnemy(),100,120);
 
         enemyControllerManager.draw(backBufferGraphics);
+        bombManger.draw(backBufferGraphics);
+
         bulletControlerManager.draw(backBufferGraphics);
 
         // Update window
@@ -190,6 +195,7 @@ public class GameWindow extends Frame implements Runnable {
                 if (planeController.getModel().isAlive()) {
                     enemyControllerManager.run();
                     bulletControlerManager.run();
+                    bombManger.run();
                 } else if (die) {
                     System.out.println("you die");
                     die = false;
